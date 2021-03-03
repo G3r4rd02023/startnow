@@ -7,7 +7,7 @@
 
 <h2>Detalle</h2>
 
-<div>
+<div class=" col-md-4 ">
     <h4>País</h4>
     <hr />
     <dl class="dl-horizontal">
@@ -24,12 +24,21 @@
             @Html.DisplayFor(model => model.CitiesNumber)
         </dd>
     </dl>
+    <div>
+        <a asp-action="AddCity" asp-route-id="@Model.Id" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning "><i class="glyphicon glyphicon-pencil"></i></a>
+        <a asp-action="Index" class="btn btn-success">Cancelar</a>
+    </div>
+    <hr />
 </div>
-<div>
-    <a asp-action="AddCity" asp-route-id="@Model.Id" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i></a>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning "><i class="glyphicon glyphicon-pencil"></i></a>
-    <a asp-action="Index" class="btn btn-success">Cancelar</a>    
+
+<div class="col-md-4">
+    @if (!string.IsNullOrEmpty(Model.ImageFullPath))
+    {
+        <img src="@Url.Content(Model.ImageFullPath)" alt="Image" style="width:150px;height:150px;max-width: 100%; height: auto;" />
+    }
 </div>
+
 <br />
 <div class="row">
     <div class="col-md-12">

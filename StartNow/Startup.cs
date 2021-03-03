@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StartNow.Data;
+using StartNow.Helpers;
 
 namespace StartNow
 {
@@ -34,6 +35,8 @@ namespace StartNow
             });
 
             services.AddTransient<SeedDb>();
+            services.AddScoped<IBlobHelper, BlobHelper>();
+            services.AddScoped<IConverterHelper, ConverterHelper>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

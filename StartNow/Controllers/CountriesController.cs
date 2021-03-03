@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using StartNow.Data;
 using StartNow.Data.Entities;
+using StartNow.Helpers;
+using StartNow.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,10 +13,14 @@ namespace StartNow.Controllers
     public class CountriesController : Controller
     {
         private readonly DataContext _context;
+        private readonly IBlobHelper _blobHelper;
+        private readonly IConverterHelper _converterHelper;
 
-        public CountriesController(DataContext context)
+        public CountriesController(DataContext context, IBlobHelper blobHelper, IConverterHelper converterHelper)
         {
             _context = context;
+            _blobHelper = blobHelper;
+            _converterHelper = converterHelper;
         }
 
         // GET: Countries
@@ -48,19 +54,29 @@ namespace StartNow.Controllers
         // GET: Countries/Create
         public IActionResult Create()
         {
-            return View();
+            CountryViewModel model = new CountryViewModel();
+            return View(model);
         }
 
         // POST: Countries/Create
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Country country)
+        public async Task<IActionResult> Create(CountryViewModel model)
         {
             if (ModelState.IsValid)
             {
+
+                Guid imageId = Guid.Empty;
+
+                if (model.ImageFile != null)
+                {
+                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "paises");
+                }
+
                 try
                 {
+                    Country country = _converterHelper.ToCountry(model, imageId, true);
                     _context.Add(country);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -81,7 +97,7 @@ namespace StartNow.Controllers
                     ModelState.AddModelError(string.Empty, exception.Message);
                 }
             }
-            return View(country);
+            return View(model);
         }
 
         // GET: Countries/Edit/5
@@ -98,24 +114,31 @@ namespace StartNow.Controllers
             {
                 return NotFound();
             }
-            return View(country);
+
+            CountryViewModel model = _converterHelper.ToCountryViewModel(country);
+
+            return View(model);
         }
 
         // POST: Countries/Edit/5
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Country country)
-        {
-            if (id != country.Id)
-            {
-                return NotFound();
-            }
-
+        public async Task<IActionResult> Edit(CountryViewModel model)
+        {           
             if (ModelState.IsValid)
             {
+
+                Guid imageId = model.ImageId;
+
+                if (model.ImageFile != null)
+                {
+                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "paises");
+                }
+
                 try
                 {
+                    Country country = _converterHelper.ToCountry(model, imageId, false);
                     _context.Update(country);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -137,7 +160,7 @@ namespace StartNow.Controllers
                 }
             }
 
-            return View(country);
+            return View(model);
         }
 
 
