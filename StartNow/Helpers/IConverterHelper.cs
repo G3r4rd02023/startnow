@@ -17,6 +17,15 @@ namespace StartNow.Helpers
 
         CountryViewModel ToCountryViewModel(Country country);
 
+        Task<Company> ToCompanyAsync(CompanyViewModel model, Guid imageId, bool isNew);
+
+        CompanyViewModel ToCompanyViewModel(Company company);
+
+        Task<Product> ToProductAsync(ProductViewModel model, bool isNew);
+
+        ProductViewModel ToProductViewModel(Product product);
+
     }
 
 }
+

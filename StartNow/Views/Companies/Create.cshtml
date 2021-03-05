@@ -1,0 +1,56 @@
+﻿@model StartNow.Data.Entities.Company
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Crear</h2>
+
+<h4>Empresa</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <partial name="_Company" />
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-success">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#CountryId").change(function () {
+                $("#CityId").empty();
+                $("#CityId").append('<option value="0">[Seleccione una ciudad...]</option>');
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("GetCities")',
+                    dataType: 'json',
+                    data: { countryId: $("#CountryId").val() },
+                    success: function (subcategories) {
+                        $.each(subcategories, function (i, city) {
+                            debugger;
+                            $("#CityId").append('<option value="'
+                                + city.id + '">'
+                                + city.name + '</option>');
+                        });
+                    },
+                    error: function (ex) {
+                        alert('Error al recuperar ciudades.' + ex);
+                    }
+                });
+                return false;
+            })
+        });
+    </script>
+}
