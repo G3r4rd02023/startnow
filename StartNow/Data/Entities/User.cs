@@ -36,6 +36,9 @@ namespace StartNow.Data.Entities
 
         public City City { get; set; }
 
+        public Company Company { get; set; }
+
+
         [Display(Name = "Usuario")]
         public string FullName => $"{FirstName} {LastName}";
 

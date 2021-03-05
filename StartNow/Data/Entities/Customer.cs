@@ -1,4 +1,5 @@
-﻿using StartNow.Enums;
+﻿using Microsoft.AspNetCore.Identity;
+using StartNow.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace StartNow.Data.Entities
 {
-    public class Customer
+    public class Customer : IdentityUser
     {
         public int Id { get; set; }
 
