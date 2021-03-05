@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StartNow.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -36,6 +37,9 @@ namespace StartNow.Data.Entities
         [Required]
         [DisplayName("Dirección")]
         public string Address { get; set; }
+
+        [Display(Name = "Rol")]
+        public UserType UserType { get; set; }
 
         [Display(Name = "Foto")]
         public Guid ImageId { get; set; }
